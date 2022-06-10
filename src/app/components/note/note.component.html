@@ -1,0 +1,56 @@
+<h1 class="text-center text-4xl">{{ note.title }}</h1>
+<button
+  (click)="onEdit(this.data.key)"
+  class="text-white mx-10 bg-blue-700 hover:bg-blue-200 float-right hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+>
+  add/remove
+</button>
+<div
+  style="
+    background-image: url(../../../assets/pics/page.jpg);
+    background-size: contain;
+    min-height: 500px;
+  "
+  class="m-10 bg-white focus:ring-2 ring-blue-500 focus:outline appearance-none leading-6 text-slate-900 placeholder-slate-400 rounded-md p-2 ring-1 ring-slate-200 shadow-sm"
+>
+  <form *ngIf="!this.data || this.isUpdate === true" (ngSubmit)="addNote()">
+    <ckeditor
+      [config]="{ toolbar: ['|', 'bold', 'italic', 'link'] }"
+      [editor]="Editor"
+      name="task"
+      [(ngModel)]="notes.task"
+      data="<p>Hello, world!</p>"
+    >
+    </ckeditor>
+    <button
+      *ngIf="!this.data"
+      class="text-white mx-10 bg-blue-700 hover:bg-blue-200 float-right hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+      type="submit"
+    >
+      Save
+    </button>
+    <button
+      (click)="updateNote()"
+      *ngIf="this.isUpdate === true"
+      class="m-4 text-white mx-10 bg-blue-700 hover:bg-blue-200 float-right hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+      type="submit"
+    >
+      Save
+    </button>
+  </form>
+  <div
+    *ngIf="this.data && this.isUpdate === false"
+    class="flex justify-center m-5"
+  >
+    <img
+      class="w-10 h-10 rounded-full mr-4"
+      src="../../../assets/pics/icon.png"
+      alt="Avatar of Jonathan Reinink"
+    />
+  </div>
+  <p
+    class="text-center"
+    *ngIf="this.data && this.isUpdate === false"
+    [innerHtml]="this.data.task"
+  ></p>
+</div>

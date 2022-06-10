@@ -1,0 +1,98 @@
+<p class="text-4xl text-center">Budget Counter</p>
+<div class="text-5xl text-center mt-2 p-10">
+  <p class="text-red-500" *ngIf="this.totalBudget <= 0">₹ {{ totalBudget }}</p>
+  <p class="text-green-500" *ngIf="this.totalBudget > 0">₹ {{ totalBudget }}</p>
+</div>
+<p class="text-center pb-4">
+  <b
+    >(Kindly insert minus before number to add value as expense . (rg .
+    -1000))</b
+  >
+</p>
+<form
+  (ngSubmit)="createEx()"
+  [formGroup]="budgetForm"
+  class="flex justify-center"
+>
+  <div>
+    <label for="amount" class="block text-sm font-medium text-gray-700"
+      >Amount</label
+    >
+    <div class="mt-1 relative rounded-md shadow-sm">
+      <div
+        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+      >
+        <span class="text-gray-500 sm:text-sm"> ₹ </span>
+      </div>
+      <input
+        type="number"
+        formControlName="amount"
+        name="amount"
+        id="amount"
+        class="w-48 p-5 focus:ring-indigo-500 focus:border-indigo-500 block pl-7 pr-12 sm:text-sm text-xl border-gray-300 rounded-md"
+        placeholder="0.00"
+      />
+      <div class="absolute inset-y-0 right-0 flex items-center">
+        <label for="currency" class="sr-only">Currency</label>
+      </div>
+    </div>
+  </div>
+  <div class="ml-5">
+    <label class="block text-sm font-medium text-gray-700">Description</label>
+    <div class="mt-1 relative rounded-md shadow-sm">
+      <div
+        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+      >
+        <span class="text-gray-500 sm:text-sm"> </span>
+      </div>
+      <input
+        type="text"
+        formControlName="description"
+        name="desc"
+        id="desc"
+        class="p-5 focus:ring-indigo-500 focus:border-indigo-500 w-full sm:text-sm text-xl border-gray-300 rounded-md"
+        placeholder="Description"
+      />
+    </div>
+  </div>
+  <button
+    class="mx-4 mt-6 bg-indigo-600 border border-transparent rounded-full py-2 px-6 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    type="submit"
+  >
+    save
+  </button>
+</form>
+<div class="flex justify-center mt-0 p-1">
+  <div>
+    <p class="text-xl text-green-600 text-center m-5">Income</p>
+    <div *ngFor="let item of expense">
+      <div
+        *ngIf="item.amount > 0"
+        class="bg-white m-2 flex justify-between p-3 rounded-lg border-2 hover:border-blue-500 hover:border-solid hover:bg-white hover:text-red-500"
+      >
+        <p *ngIf="item.amount > 0" class="text-green-500 text-center p-2">
+          {{ item.amount }}
+        </p>
+        <p *ngIf="item.amount > 0" class="text-green-500 text-center p-2 mx-4">
+          {{ item.description }}
+        </p>
+        <button *ngIf="item.amount > 0" (click)="deleteEx(item)">X</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="text-xl text-red-600 text-center m-5">Expense</p>
+    <div *ngFor="let item of expense">
+      <div
+        *ngIf="item.amount < 0"
+        class="bg-white m-2 flex justify-between p-3 rounded-lg border-2 hover:border-blue-500 hover:border-solid hover:bg-white hover:text-red-500"
+      >
+        <p class="text-red-500 text-center p-2">{{ item.amount }}</p>
+        <p *ngIf="item.amount < 0" class="text-red-500 text-center p-2 mx-4">
+          {{ item.description }}
+        </p>
+        <button *ngIf="item.amount < 0" (click)="deleteEx(item)">X</button>
+      </div>
+    </div>
+  </div>
+</div>

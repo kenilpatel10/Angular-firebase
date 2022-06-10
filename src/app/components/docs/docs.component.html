@@ -1,0 +1,250 @@
+<div class="bg-white m-9 rounded-lg">
+  <p class="text-center pt-2">
+    <b
+      >You can add docs like driving license, covid certificate , educational
+      docs, etc..</b
+    >
+  </p>
+  <div
+    class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8"
+  >
+    <div
+      class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+    >
+      <a
+        (click)="toggleModal()"
+        class="group hover:border-blue-500 hover:border-dashed hover:bg-white hover:text-blue-500 group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-500 text-sm leading-6 text-slate-900 font-medium py-3"
+      >
+        <div
+          class="w-full hover: aspect-w-1 aspect-h-1 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8"
+        >
+          <p
+            class="w-full h-full object-center object-cover group-hover:opacity-75 text-center"
+          >
+            + Add Docs
+          </p>
+        </div>
+      </a>
+      <div *ngFor="let i of this.docs">
+        <a
+          [href]="
+            i.file === null
+              ? 'https://unsplash.com/photos/nE2HV5AUXFo/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8ZG9jdW1lbnRzfGVufDB8fHx8MTY1MzU0NzgwNw&force=true'
+              : i.file
+          "
+          class="group"
+        >
+          <div
+            class="w-full hover:bg-black aspect-w-1 aspect-h-1 bg-gray-200 rounded-t-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8"
+          >
+            <img
+              *ngIf="i.type === 'image'"
+              [src]="i.file"
+              alt="Tall slender porcelain bottle with natural clay textured body and cork stopper."
+              class="w-full h-full object-center object-cover group-hover:opacity-75"
+            />
+            <img
+              *ngIf="i.type === 'doc'"
+              src="../../../assets/pics/doc.png"
+              alt="Tall slender porcelain bottle with natural clay textured body and cork stopper."
+              class="w-full h-full object-center object-cover group-hover:opacity-75"
+            />
+          </div>
+        </a>
+
+        <div class="grid gap-4 grid-cols-2 bg-gray-200 p-2 rounded-b-lg">
+          <div>
+            <p class="place-items-end">{{ i.title }}</p>
+          </div>
+          <div class="flex justify-end">
+            <button
+              (click)="deleteDoc(i.key)"
+              class="opacity-30 hover:opacity-100 duration-300 hover:text-red-500 text-xl text-black font-semibold px-2"
+            >
+              x
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- More products... -->
+    </div>
+  </div>
+</div>
+
+<div
+  id="defaultModal"
+  *ngIf="showModal"
+  tabindex="-1"
+  aria-hidden="true"
+  class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
+>
+  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <!-- Modal header -->
+      <div
+        class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600"
+      >
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          Add doc
+        </h3>
+        <button
+          type="button"
+          (click)="toggleModal()"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-toggle="defaultModal"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="p-6 space-y-6">
+        <form
+          [formGroup]="docForm"
+          (ngSubmit)="addDoc()"
+          class="space-y-6"
+          action="#"
+        >
+          <div>
+            <label
+              for="title"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Doc title</label
+            >
+            <input
+              formControlName="title"
+              type="text"
+              name="title"
+              id="title"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              placeholder="Title"
+              required
+            />
+            <div
+              *ngIf="
+                this.docForm.value.title.errors &&
+                (this.docForm.value.title.dirty ||
+                  this.docForm.value.title.touched)
+              "
+            >
+              <p *ngIf="this.docForm.value.title.errors.minlength">
+                minimum 15 characters only
+              </p>
+            </div>
+          </div>
+          <div class="max-w-xl">
+            <label
+              *ngIf="this.isImage === true"
+              class="flex justify-center w-full p-5 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none"
+            >
+              <span class="flex items-center space-x-2">
+                <img
+                  *ngIf="imgSrc"
+                  [src]="imgSrc"
+                  width="120"
+                  height="120"
+                  class="img"
+                />
+                <span class="font-medium text-gray-600">
+                  Add image Here
+                  <span class="text-blue-600 underline">browse</span>
+                </span>
+              </span>
+              <input
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                class="hidden"
+                (change)="showPreview($event)"
+              />
+            </label>
+            <label
+              *ngIf="this.isDoc === true"
+              class="flex justify-center w-full p-5 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none"
+            >
+              <span class="flex items-center space-x-2">
+                <p class="bg-gray-300 text-md p-2 rounded-md">
+                  {{ this.selectedImage.name }}
+                </p>
+                <span class="font-medium text-gray-600">
+                  Add Doc Here
+                  <span class="text-blue-600 underline">browse</span>
+                </span>
+              </span>
+              <input
+                type="file"
+                accept=" .txt, .doc , .pdf "
+                class="hidden"
+                (change)="showPreview($event)"
+              />
+            </label>
+            <div class="m-3 flex justify-center">
+              <!-- <object [data]="selectedImage" type="application/pdf">
+                        <embed [src]="selectedImage" type="application/pdf" />
+                    </object> -->
+              <pdf-viewer
+                [src]="pdfSrc"
+                [render-text]="true"
+                style="display: block"
+              ></pdf-viewer>
+            </div>
+            <div class="flex justify-start">
+              <div class="form-check form-check-inline p-2">
+                <input
+                  (click)="onImage()"
+                  name="isImage"
+                  formControlName="type"
+                  class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                  type="radio"
+                  name="inlineRadioOptions"
+                  id="inlineRadio1"
+                  value="image"
+                />
+                <label
+                  class="form-check-label inline-block text-gray-800"
+                  for="inlineRadio10"
+                  >Image</label
+                >
+              </div>
+              <div class="form-check form-check-inline p-2">
+                <input
+                  name="isDoc"
+                  (click)="onDoc()"
+                  formControlName="type"
+                  class="form-check-input form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2"
+                  type="radio"
+                  name="inlineRadioOptions"
+                  id="inlineRadio3"
+                  value="doc"
+                />
+                <label
+                  class="form-check-label inline-block text-gray-800"
+                  for="inlineRadio30"
+                  >Doc</label
+                >
+              </div>
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Add note
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div></div>
+<div *ngIf="showModal" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
